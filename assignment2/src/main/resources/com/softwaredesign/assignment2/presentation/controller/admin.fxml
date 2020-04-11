@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<TabPane
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="-Infinity"
+        prefHeight="535.0"
+        prefWidth="992.0"
+        tabClosingPolicy="UNAVAILABLE"
+        xmlns:fx="http://javafx.com/fxml/1"
+        xmlns="http://javafx.com/javafx/8"
+        fx:controller="com.softwaredesign.assignment2.presentation.controller.AdminController">
+    <tabs>
+        <Tab text="Users">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="718.0">
+                    <children>
+                        <TableView fx:id="userTable" layoutX="40.0" layoutY="36.0" prefHeight="379.0" prefWidth="316.0">
+                            <columns>
+                                <TableColumn prefWidth="54.0" text="id">
+                                    <cellValueFactory><PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="96.0" text="username">
+                                    <cellValueFactory><PropertyValueFactory property="username" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="89.0" text="password">
+                                    <cellValueFactory><PropertyValueFactory property="password" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="75.0" text="wallet">
+                                    <cellValueFactory><PropertyValueFactory property="wallet" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                </FXCollections>
+                            </items>
+                        </TableView>
+                        <Label layoutX="530.0" layoutY="58.0" text="Player Operations">
+                            <font>
+                                <Font size="21.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="username" layoutX="512.0" layoutY="129.0" prefHeight="30.0" prefWidth="200.0" promptText="username" />
+                        <TextField fx:id="password" layoutX="512.0" layoutY="194.0" prefHeight="30.0" prefWidth="200.0" promptText="password" />
+                        <TextField fx:id="wallet" layoutX="512.0" layoutY="261.0" prefHeight="30.0" prefWidth="200.0" promptText="wallet" />
+                        <Button fx:id="saveUserButton" onAction="#saveNewUser" layoutX="456.0" layoutY="358.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Save" />
+                        <Button fx:id="updateUserButton" onAction="#updateUser" layoutX="565.0" layoutY="358.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Update" />
+                        <Button fx:id="deleteUserButton" onAction="#deleteUser" layoutX="674.0" layoutY="358.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Delete" />
+                        <Button fx:id="logOutButton" onAction="#logout" layoutX="40.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Log out" />
+                    </children></AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Flowers">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <TableView fx:id="flowerTable" layoutX="40.0" layoutY="36.0" prefHeight="379.0" prefWidth="260.0">
+                            <columns>
+                                <TableColumn prefWidth="59.0" text="id">
+                                    <cellValueFactory><PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="117.0" text="name">
+                                    <cellValueFactory><PropertyValueFactory property="name" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="83.0" text="price">
+                                    <cellValueFactory><PropertyValueFactory property="price" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                </FXCollections>
+                            </items>
+                        </TableView>
+                        <Button fx:id="deleteFlowerButton" onAction="#deleteFlower" layoutX="570.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Delete" />
+                        <Button fx:id="updateFlowerButton" onAction="#updateFlower" layoutX="461.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Update" />
+                        <Button fx:id="saveFlowerButton" onAction="#saveNewFlower" layoutX="352.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Save" />
+                        <TextField fx:id="flowerPrice" layoutX="408.0" layoutY="230.0" prefHeight="30.0" prefWidth="200.0" promptText="price" />
+                        <TextField fx:id="flowerName" layoutX="408.0" layoutY="163.0" prefHeight="30.0" prefWidth="200.0" promptText="name" />
+                        <Label layoutX="426.0" layoutY="61.0" text="Flower Operations">
+                            <font>
+                                <Font size="21.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="generateReportButton" onAction="#generateReport" layoutX="788.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Generate" />
+                        <ComboBox fx:id="reportComboBox" layoutX="760.0" layoutY="188.0" prefHeight="31.0" prefWidth="150.0" />
+                        <Label layoutX="758.0" layoutY="61.0" text="Generate Report">
+                            <font>
+                                <Font size="21.0" />
+                            </font>
+                        </Label>
+                        <Button onAction="#logout" layoutX="40.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Log out" />
+                    </children></AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Bouquets">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <TableView fx:id="bouquetTable" layoutX="40.0" layoutY="36.0" prefHeight="379.0" prefWidth="260.0">
+                            <columns>
+                                <TableColumn prefWidth="59.0" text="id">
+                                    <cellValueFactory><PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="117.0" text="name">
+                                    <cellValueFactory><PropertyValueFactory property="name" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="86.0" text="price">
+                                    <cellValueFactory><PropertyValueFactory property="price" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                </FXCollections>
+                            </items>
+                        </TableView>
+                        <Label layoutX="415.0" layoutY="59.0" text="Bouquet Operations">
+                            <font>
+                                <Font size="21.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="bouquetName" layoutX="408.0" layoutY="115.0" prefHeight="30.0" prefWidth="200.0" promptText="name" />
+                        <Button fx:id="saveBouquetButton" onAction="#saveNewBouquet" layoutX="352.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Save" />
+                        <Button fx:id="updateBouquetButton" onAction="#updateNewBouquet" layoutX="461.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Update" />
+                        <Button fx:id="deleteBouquetButton" onAction="#deleteNewBouquet" layoutX="570.0" layoutY="361.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Delete" />
+                        <ComboBox fx:id="flowerComboBox" layoutX="347.0" layoutY="182.0" prefHeight="31.0" prefWidth="150.0" promptText="Flowers" />
+                        <TextField fx:id="flowerCount" layoutX="565.0" layoutY="182.0" prefHeight="31.0" prefWidth="40.0" />
+                        <Label layoutX="510.0" layoutY="187.0" text="Count:" />
+                        <Button fx:id="addFlowerToBouquetButton" onAction="#addFlowerToBouquet" layoutX="622.0" layoutY="182.0" mnemonicParsing="false" text="Add" />
+                        <TableView fx:id="flowerBouquetTable" layoutX="707.0" layoutY="94.0" prefHeight="263.0" prefWidth="261.0">
+                            <columns>
+                                <TableColumn prefWidth="115.0" text="name">
+                                    <cellValueFactory><PropertyValueFactory property="name" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="75.0" text="price">
+                                    <cellValueFactory><PropertyValueFactory property="price" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="69.0" text="count">
+                                    <cellValueFactory><PropertyValueFactory property="count" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                </FXCollections>
+                            </items>
+                        </TableView>
+                        <Button onAction="#logout" layoutX="40.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Log out" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
