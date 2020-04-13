@@ -9,17 +9,19 @@ public class FlowerFXML {
     private final SimpleStringProperty price = new SimpleStringProperty("");
     private final SimpleStringProperty count = new SimpleStringProperty("");
 
-    public  FlowerFXML(){
-        this(0, "", 0, 0);
-    }
-
-    public  FlowerFXML(Integer id, String name, Integer price){
+    public  FlowerFXML(int id, String name, int price){
         setId(Integer.toString(id));
         setName(name);
         setPrice(Integer.toString(price));
     }
 
-    public  FlowerFXML(Integer id, String name, int price, Integer count){
+    public  FlowerFXML(String name, int price, int count){
+        setName(name);
+        setPrice(Integer.toString(price));
+        setCount(Integer.toString(count));
+    }
+
+    public  FlowerFXML(int id, String name, int price, int count){
         setId(Integer.toString(id));
         setName(name);
         setPrice(Integer.toString(price));

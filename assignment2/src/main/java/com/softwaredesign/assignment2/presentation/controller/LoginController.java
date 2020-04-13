@@ -1,9 +1,10 @@
 package com.softwaredesign.assignment2.presentation.controller;
 
 import com.softwaredesign.assignment2.JavaFxApplication;
-import com.softwaredesign.assignment2.business.Functions;
-import com.softwaredesign.assignment2.business.UserService;
+import com.softwaredesign.assignment2.business.implementations.Functions;
+import com.softwaredesign.assignment2.business.interfaces.UserServiceI;
 import com.softwaredesign.assignment2.dto.UserDTO;
+import com.softwaredesign.assignment2.persistance.entity.Role;
 import com.softwaredesign.assignment2.presentation.util.AlertBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,10 +28,10 @@ public class LoginController {
     @FXML
     public TextField password;
 
-    private UserService userService;
+    private UserServiceI userService;
 
     @Inject
-    public LoginController(UserService userService){
+    public LoginController(UserServiceI userService){
         this.userService = userService;
     }
 
@@ -39,7 +40,10 @@ public class LoginController {
         if(Functions.validateLoginInput(mail.getText(), password.getText())){
             UserDTO loginResult = userService.login(mail.getText(), password.getText());
             if(loginResult != null){
-                JavaFxApplication.changeScene(AdminController.class);
+                if(loginResult.getRole().equals(Role.ADMIN)){
+                    JavaFxApplication.changeScene(AdminController.class);
+                }
+
             }
 
         } else{

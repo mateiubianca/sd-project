@@ -1,5 +1,6 @@
-package com.softwaredesign.assignment2.business;
+package com.softwaredesign.assignment2.business.implementations;
 
+import com.softwaredesign.assignment2.business.interfaces.UserServiceI;
 import com.softwaredesign.assignment2.dto.UserDTO;
 import com.softwaredesign.assignment2.persistance.entity.Role;
 import com.softwaredesign.assignment2.persistance.entity.User;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserServiceI {
 
     @Inject
     private UserRepo userRepo;
@@ -37,6 +38,24 @@ public class UserService {
         }
 
         return usersDto;
+    }
+
+    public void createUser(String username, String password, int wallet){
+        User user = User.builder().username(username).password(password).wallet(wallet).role(Role.USER).build();
+        userRepo.save(user);
+    }
+
+    public void updateUser(int id, String username, String password, int wallet){
+        User user = userRepo.findById(id);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setWallet(wallet);
+        userRepo.save(user);
+    }
+
+    public void deleteUser(int id){
+        User user = userRepo.findById(id);
+        userRepo.delete(user);
     }
 
 }

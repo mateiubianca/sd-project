@@ -12,4 +12,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     public  List<User> findAllByRole(Role role);
 
+    public User findById(int id);
+
+
 }
