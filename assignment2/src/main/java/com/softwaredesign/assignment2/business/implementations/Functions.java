@@ -1,13 +1,28 @@
 package com.softwaredesign.assignment2.business.implementations;
 
-public class Functions {
+import com.softwaredesign.assignment2.business.interfaces.FunctionsI;
+import com.softwaredesign.assignment2.dto.ItemDTO;
+import com.softwaredesign.assignment2.dto.UserDTO;
+import com.softwaredesign.assignment2.persistance.entity.Flower;
+import com.softwaredesign.assignment2.persistance.repo.FlowerRepo;
+import org.springframework.stereotype.Service;
 
-    public static boolean validateLoginInput(String mail, String pass){
+import javax.inject.Inject;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+@Service
+public class Functions implements FunctionsI {
+
+    @Inject
+    private FlowerRepo flowerRepo;
+
+    public boolean validateLoginInput(String mail, String pass){
 
         return !mail.equals("") && !pass.equals("");
     }
 
-    public static boolean validateNewUserInput(String username, String pass, String wallet){
+    public boolean validateNewUserInput(String username, String pass, String wallet){
         if(!username.equals("") && !wallet.equals("") && !pass.equals("")){
             try{
                 int walletValue = Integer.parseInt(wallet);
@@ -24,7 +39,7 @@ public class Functions {
         }
     }
 
-    public static boolean validateNewFlowerToBouquetInput(String name, String no){
+    public boolean validateNewFlowerToBouquetInput(String name, String no){
         if(!name.equals("") && !no.equals("")){
             try{
                 int priceValue = Integer.parseInt(no);
@@ -37,7 +52,7 @@ public class Functions {
         }
     }
 
-    public static boolean validateNewFlowerInput(String name, String price){
+    public boolean validateNewFlowerInput(String name, String price){
         if(!name.equals("") && !price.equals("")){
             try{
                 int priceValue = Integer.parseInt(price);
@@ -54,8 +69,29 @@ public class Functions {
         }
     }
 
-    public static boolean validateNewBouquetInput(String name, int flowerNo){
+    public boolean validateNewFlowerInputUnique(String name){
+        List<Flower> flowers = flowerRepo.findAll();
+        AtomicBoolean ok = new AtomicBoolean(true);
+
+        flowers.forEach(f->{
+            if(f.getName().equals(name)){
+                ok.set(false);
+            }
+        });
+
+        return ok.get();
+    }
+
+    public boolean validateReportInput(String name){
+        return !name.equals("");
+    }
+
+    public boolean validateNewBouquetInput(String name, int flowerNo){
         return !name.equals("") && flowerNo > 0;
+    }
+
+    public boolean validateOrderInput(UserDTO userDTO, ItemDTO itemDTO){
+        return userDTO != null && itemDTO != null;
     }
 
 }

@@ -4,9 +4,12 @@ import com.softwaredesign.assignment2.business.interfaces.FlowerServiceI;
 import com.softwaredesign.assignment2.dto.FlowerDTO;
 import com.softwaredesign.assignment2.persistance.entity.BouquetFlower;
 import com.softwaredesign.assignment2.persistance.entity.Flower;
+import com.softwaredesign.assignment2.persistance.entity.Item;
+import com.softwaredesign.assignment2.persistance.entity.ItemType;
 import com.softwaredesign.assignment2.persistance.repo.BouquetFlowerRepo;
 import com.softwaredesign.assignment2.persistance.repo.BouquetRepo;
 import com.softwaredesign.assignment2.persistance.repo.FlowerRepo;
+import com.softwaredesign.assignment2.persistance.repo.ItemRepo;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -21,6 +24,9 @@ public class FlowerService implements FlowerServiceI {
 
     @Inject
     private BouquetRepo bouquetRepo;
+
+    @Inject
+    private ItemRepo itemRepo;
 
     @Inject
     private BouquetFlowerRepo bouquetFlowerRepo;
@@ -46,7 +52,9 @@ public class FlowerService implements FlowerServiceI {
 
     public void createFlower(String name, int price){
         Flower flower = Flower.builder().name(name).price(price).bouquetFlowers(new ArrayList<>()).build();
-        flowerRepo.save(flower);
+        Flower saved = flowerRepo.save(flower);
+        Item item = Item.builder().type(ItemType.FLOWER).item(saved.getId()).build();
+        itemRepo.save(item);
     }
 
     public void updateFlower(int id, String name, int price){
@@ -60,6 +68,14 @@ public class FlowerService implements FlowerServiceI {
         Flower flower = flowerRepo.findById(id);
 
         List<BouquetFlower> bouquetFlowers = bouquetFlowerRepo.findAllByFlower(flower);
+
+        List<Item> items = itemRepo.findAllByType(ItemType.FLOWER);
+
+        items.forEach(i->{
+            if(i.getItem() == id){
+                itemRepo.delete(i);
+            }
+        });
 
 /*        for (BouquetFlower bf: bouquetFlowers) {
             int idBouquet = bf.getBouquet().getId();

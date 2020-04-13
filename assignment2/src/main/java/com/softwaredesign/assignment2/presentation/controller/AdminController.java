@@ -1,11 +1,7 @@
 package com.softwaredesign.assignment2.presentation.controller;
 
 import com.softwaredesign.assignment2.JavaFxApplication;
-import com.softwaredesign.assignment2.business.implementations.Functions;
-import com.softwaredesign.assignment2.business.interfaces.BouquetFlowerServiceI;
-import com.softwaredesign.assignment2.business.interfaces.BouquetServiceI;
-import com.softwaredesign.assignment2.business.interfaces.FlowerServiceI;
-import com.softwaredesign.assignment2.business.interfaces.UserServiceI;
+import com.softwaredesign.assignment2.business.interfaces.*;
 import com.softwaredesign.assignment2.dto.BouquetDTO;
 import com.softwaredesign.assignment2.dto.BouquetFlowerDTO;
 import com.softwaredesign.assignment2.dto.FlowerDTO;
@@ -26,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,9 +35,6 @@ public class AdminController {
     private int selectedFlowerId;
     private int selectedBouquetId;
 
-    //private BouquetDTO newBouquet;
-    private HashMap<String, Integer> newBouquetFlowers = new HashMap<>();
-    private HashMap<String, Integer> newBouquetFlowersIds = new HashMap<>();
     private ArrayList<BouquetFlowerDTO> bouquetFlowersSelected = new ArrayList<>();
 
     @FXML public TextField username;
@@ -52,6 +44,7 @@ public class AdminController {
     @FXML public Button saveUserButton;
     @FXML public Button updateUserButton;
     @FXML public Button logOutButton;
+    @FXML public Button clearButton;
 
     @FXML private TableView<UserFXML> userTable;
     @FXML private TableView<FlowerFXML> flowerTable;
@@ -61,7 +54,6 @@ public class AdminController {
     @FXML public TextField flowerPrice;
     @FXML public TextField flowerName;
 
-    @FXML public Button deleteFlowerButton;
     @FXML public Button updateFlowerButton;
     @FXML public Button saveFlowerButton;
     @FXML public Button generateReportButton;
@@ -74,20 +66,23 @@ public class AdminController {
 
     @FXML public Button saveBouquetButton;
     @FXML public Button updateBouquetButton;
-    @FXML public Button deleteBouquetButton;
     @FXML public Button addFlowerToBouquetButton;
 
     private UserServiceI userService;
     private FlowerServiceI flowerService;
     private BouquetServiceI bouquetService;
     private BouquetFlowerServiceI bouquetFlowerService;
+    private OrderServiceI orderService;
+    private FunctionsI functions;
 
     @Inject
-    public AdminController(UserServiceI userService, FlowerServiceI flowerService, BouquetServiceI bouquetService, BouquetFlowerServiceI bouquetFlowerService){
+    public AdminController(UserServiceI userService, FlowerServiceI flowerService, BouquetServiceI bouquetService, BouquetFlowerServiceI bouquetFlowerService, OrderServiceI orderService, FunctionsI functions){
         this.flowerService = flowerService;
         this.userService = userService;
         this.bouquetService = bouquetService;
         this.bouquetFlowerService = bouquetFlowerService;
+        this.orderService = orderService;
+        this.functions = functions;
     }
 
     @FXML
@@ -226,11 +221,13 @@ public class AdminController {
         username.setText("");
         password.setText("");
         wallet.setText("");
+        selectedUserId = 0;
     }
 
     private void clearTextFieldsFlower(){
         flowerName.setText("");
         flowerPrice.setText("");
+        selectedFlowerId = 0;
     }
 
     private void clearTextFieldsBouquet(){
@@ -238,6 +235,8 @@ public class AdminController {
         flowerCount.setText("");
         flowerComboBox.setValue(null);
         flowerBouquetTable.getItems().clear();
+        selectedBouquetId = 0;
+        bouquetFlowersSelected = new ArrayList<>();
     }
 
     private void selectRow(UserFXML rowData){
@@ -325,7 +324,6 @@ public class AdminController {
         ObservableList<FlowerFXML> dataFlowerBouquet = flowerBouquetTable.getItems();
 
         bouquetFlowersSelected.forEach(bf -> {
-            //FlowerDTO flowerDTO = flowerService.getFlowerByName(key);
             FlowerFXML flower = new FlowerFXML(bf.getId(), bf.getFlower().getName(), bf.getFlower().getPrice(), bf.getQuantity());
             dataFlowerBouquet.add(flower);
         });
@@ -341,7 +339,7 @@ public class AdminController {
     }
 
     public void saveNewUser(){
-        if(Functions.validateNewUserInput(username.getText(), password.getText(), wallet.getText())){
+        if(functions.validateNewUserInput(username.getText(), password.getText(), wallet.getText())){
             userService.createUser(username.getText(), password.getText(), Integer.parseInt(wallet.getText()));
             AlertBox.display("OK", "New User created");
             populateTableUsers();
@@ -353,7 +351,7 @@ public class AdminController {
     }
 
     public void updateUser(){
-        if(Functions.validateNewUserInput(username.getText(), password.getText(), wallet.getText())){
+        if(functions.validateNewUserInput(username.getText(), password.getText(), wallet.getText())){
             userService.updateUser(selectedUserId, username.getText(), password.getText(), Integer.parseInt(wallet.getText()));
             AlertBox.display("OK", "User updated");
             populateTableUsers();
@@ -370,7 +368,8 @@ public class AdminController {
     }
 
     public void saveNewFlower(){
-        if(Functions.validateNewFlowerInput(flowerName.getText(), flowerPrice.getText())){
+        if(functions.validateNewFlowerInput(flowerName.getText(), flowerPrice.getText())
+            && functions.validateNewFlowerInputUnique((flowerName.getText()))){
             flowerService.createFlower(flowerName.getText(), Integer.parseInt(flowerPrice.getText()));
             AlertBox.display("OK", "Flower created");
             populateTableFlowers();
@@ -383,7 +382,7 @@ public class AdminController {
     }
 
     public void updateFlower(){
-        if(Functions.validateNewFlowerInput(flowerName.getText(), flowerPrice.getText())){
+        if(functions.validateNewFlowerInput(flowerName.getText(), flowerPrice.getText())){
             flowerService.updateFlower(selectedFlowerId, flowerName.getText(), Integer.parseInt(flowerPrice.getText()));
             AlertBox.display("OK", "Flower updated");
             populateTableFlowers();
@@ -397,21 +396,28 @@ public class AdminController {
 
     private void deleteFlower(int id){
         flowerService.deleteFlower(id);
+
+        updateBouquetButton.setDisable(true);
+        clearTextFieldsBouquet();
+
         populateTableFlowers();
         loadFlowerList();
     }
 
     public void generateReport(){
-
+        if(functions.validateReportInput((String) reportComboBox.getValue())){
+            orderService.generateOrderReport((String) reportComboBox.getValue());
+        }else{
+            AlertBox.display("Error", "Invalid data");
+        }
     }
 
     public void saveNewBouquet(){
-        if(Functions.validateNewBouquetInput(bouquetName.getText(), bouquetFlowersSelected.size())){
+        if(functions.validateNewBouquetInput(bouquetName.getText(), bouquetFlowersSelected.size())){
 
             bouquetService.createBouquet(bouquetName.getText(), bouquetFlowersSelected);
             populateTableBouquets();
             clearTextFieldsBouquet();
-            bouquetFlowersSelected = new ArrayList<>();
             updateBouquetButton.setDisable(true);
         }else{
             AlertBox.display("Error", "Invalid data");
@@ -419,12 +425,11 @@ public class AdminController {
     }
 
     public void updateNewBouquet(){
-        if(Functions.validateNewBouquetInput(bouquetName.getText(), bouquetFlowersSelected.size())){
+        if(functions.validateNewBouquetInput(bouquetName.getText(), bouquetFlowersSelected.size())){
 
             bouquetService.updateBouquet(selectedBouquetId, bouquetName.getText(), bouquetFlowersSelected);
             populateTableBouquets();
             clearTextFieldsBouquet();
-            bouquetFlowersSelected = new ArrayList<>();
             updateBouquetButton.setDisable(true);
         }else{
             AlertBox.display("Error", "Invalid data");
@@ -438,7 +443,7 @@ public class AdminController {
 
     public void addFlowerToBouquet(){
         String flowerName = (String) flowerComboBox.getValue();
-        if(Functions.validateNewFlowerToBouquetInput(flowerName, flowerCount.getText())){
+        if(functions.validateNewFlowerToBouquetInput(flowerName, flowerCount.getText())){
             int no = Integer.parseInt(flowerCount.getText());
             AtomicBoolean found = new AtomicBoolean(false);
 
@@ -447,7 +452,7 @@ public class AdminController {
                     if(bfs.getQuantity() + no > 0){
                         bfs.setQuantity(bfs.getQuantity() + no);
                     } else{
-                        AlertBox.display("Error", "YInvalid quantity");
+                        AlertBox.display("Error", "Invalid quantity");
                     }
                    found.set(true);
                 }
@@ -455,7 +460,7 @@ public class AdminController {
 
             if(!found.get()){
                 if(no > 0){
-
+                    //BouquetDTO bouquetDTO = bouquetService.getBouquetById(selectedBouquetId);
                     FlowerDTO flowerDTO = flowerService.getFlowerByName(flowerName);
                     BouquetFlowerDTO bouquetFlowerDTO = new BouquetFlowerDTO(flowerDTO, no);
                     bouquetFlowersSelected.add(bouquetFlowerDTO);
@@ -484,6 +489,19 @@ public class AdminController {
 
     public void logout(){
         JavaFxApplication.changeScene(LoginController.class);
+    }
+
+    public void clearFields(){
+        selectedFlowerId = 0;
+        selectedUserId = 0;
+        selectedBouquetId = 0;
+        bouquetFlowersSelected = new ArrayList<>();
+        updateUserButton.setDisable(true);
+        updateBouquetButton.setDisable(true);
+        updateFlowerButton.setDisable(true);
+        clearTextFieldsUser();
+        clearTextFieldsFlower();
+        clearTextFieldsBouquet();
     }
 
 }

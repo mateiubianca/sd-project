@@ -17,28 +17,21 @@ import static lombok.AccessLevel.PRIVATE;
 @ToString                       // ToString method implementation for class
 @Getter                         // Getters for all fields of the class
 @Setter
-@Table(name = "user")
+@Table(name = "items")
 @Entity
-public class User {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true)
-    private String username;
-
-    @Column
-    private String password;
-
-    @Column
-    private int wallet;
-
     @Enumerated(EnumType.STRING)
     @Column(length = 8)
-    private Role role;
+    private ItemType type;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade =CascadeType.REMOVE, orphanRemoval = true)
+    @Column
+    private Integer item;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "item", cascade =CascadeType.REMOVE)
     private List<Order> orders = new ArrayList<>();
-
 }

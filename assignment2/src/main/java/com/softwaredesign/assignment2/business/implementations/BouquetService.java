@@ -3,12 +3,11 @@ package com.softwaredesign.assignment2.business.implementations;
 import com.softwaredesign.assignment2.business.interfaces.BouquetServiceI;
 import com.softwaredesign.assignment2.dto.BouquetDTO;
 import com.softwaredesign.assignment2.dto.BouquetFlowerDTO;
-import com.softwaredesign.assignment2.persistance.entity.Bouquet;
-import com.softwaredesign.assignment2.persistance.entity.BouquetFlower;
-import com.softwaredesign.assignment2.persistance.entity.Flower;
+import com.softwaredesign.assignment2.persistance.entity.*;
 import com.softwaredesign.assignment2.persistance.repo.BouquetFlowerRepo;
 import com.softwaredesign.assignment2.persistance.repo.BouquetRepo;
 import com.softwaredesign.assignment2.persistance.repo.FlowerRepo;
+import com.softwaredesign.assignment2.persistance.repo.ItemRepo;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -25,6 +24,8 @@ public class BouquetService implements BouquetServiceI {
     private FlowerRepo flowerRepo;
     @Inject
     private BouquetFlowerRepo bouquetFlowerRepo;
+    @Inject
+    private ItemRepo itemRepo;
 
     public ArrayList<BouquetDTO> getAllBouquets(){
         ArrayList<BouquetDTO> bouquetDTO = new ArrayList<>();
@@ -35,6 +36,11 @@ public class BouquetService implements BouquetServiceI {
         }
 
         return bouquetDTO;
+    }
+
+    public BouquetDTO getBouquetById(int id){
+        Bouquet bouquet = bouquetRepo.findById(id);
+        return new BouquetDTO(bouquet);
     }
 
     public void createBouquet(String name,  ArrayList<BouquetFlowerDTO> flowers){
@@ -60,11 +66,14 @@ public class BouquetService implements BouquetServiceI {
         bouquet.setName(name);
         bouquet.getBouquetFlowers().addAll(bouquetFlowers);
 
-        bouquetRepo.save(bouquet);
+        Bouquet saved = bouquetRepo.save(bouquet);
 
         bouquet.getBouquetFlowers().forEach(b ->{
             bouquetFlowerRepo.save(b);
         });
+
+        Item item = Item.builder().type(ItemType.BOUQUET).item(saved.getId()).build();
+        itemRepo.save(item);
 
     }
 
@@ -111,6 +120,14 @@ public class BouquetService implements BouquetServiceI {
 
     public void deleteBouquet(int id){
         Bouquet bouquet = bouquetRepo.findById(id);
+
+        List<Item> items = itemRepo.findAllByType(ItemType.BOUQUET);
+
+        items.forEach(i->{
+            if(i.getItem() == id){
+                itemRepo.delete(i);
+            }
+        });
 
 /*        List<BouquetFlower> bouquetFlowers1 = bouquetFlowerRepo.findAllByBouquet(bouquet);
 

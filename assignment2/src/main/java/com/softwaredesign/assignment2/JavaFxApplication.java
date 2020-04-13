@@ -41,7 +41,6 @@ public class JavaFxApplication extends Application {
 
         //Stage stage = new Stage();
         Scene newScene = new Scene(pane);
-        newScene.getStylesheets().add("Style.css");
         window.setScene(newScene);
         window.show();
 

@@ -5,9 +5,6 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static lombok.AccessLevel.PRIVATE;
 
 @AllArgsConstructor             // Creates constructor with all of the fields as arguments
@@ -17,28 +14,21 @@ import static lombok.AccessLevel.PRIVATE;
 @ToString                       // ToString method implementation for class
 @Getter                         // Getters for all fields of the class
 @Setter
-@Table(name = "user")
+@Table(name = "orders")
 @Entity
-public class User {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true)
-    private String username;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column
-    private String password;
-
-    @Column
-    private int wallet;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 8)
-    private Role role;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade =CascadeType.REMOVE, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+    // @Id
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_id")
+    private Item item;
 
 }

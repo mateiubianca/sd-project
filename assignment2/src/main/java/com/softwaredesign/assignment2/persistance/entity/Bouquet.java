@@ -31,6 +31,7 @@ public class Bouquet {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "bouquet", cascade = CascadeType.REMOVE)
     private List<BouquetFlower> bouquetFlowers = new ArrayList<>();
 
+
     public int calculatePrice(){
         int price = 0;
         for (BouquetFlower f: this.bouquetFlowers) {

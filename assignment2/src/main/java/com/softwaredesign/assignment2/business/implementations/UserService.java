@@ -40,6 +40,16 @@ public class UserService implements UserServiceI {
         return usersDto;
     }
 
+    public UserDTO getUserByUsername(String username){
+        List<User> users = userRepo.findAllByUsername(username);
+        if(users.size() > 0) {
+            User user = users.get(0);
+            return new UserDTO(user);
+        }
+
+        return null;
+    }
+
     public void createUser(String username, String password, int wallet){
         User user = User.builder().username(username).password(password).wallet(wallet).role(Role.USER).build();
         userRepo.save(user);

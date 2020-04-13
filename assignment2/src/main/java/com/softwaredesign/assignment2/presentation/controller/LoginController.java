@@ -1,7 +1,7 @@
 package com.softwaredesign.assignment2.presentation.controller;
 
 import com.softwaredesign.assignment2.JavaFxApplication;
-import com.softwaredesign.assignment2.business.implementations.Functions;
+import com.softwaredesign.assignment2.business.interfaces.FunctionsI;
 import com.softwaredesign.assignment2.business.interfaces.UserServiceI;
 import com.softwaredesign.assignment2.dto.UserDTO;
 import com.softwaredesign.assignment2.persistance.entity.Role;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 @Component
 @FxmlView("login.fxml")
@@ -28,22 +29,32 @@ public class LoginController {
     @FXML
     public TextField password;
 
+    private FunctionsI functions;
     private UserServiceI userService;
 
     @Inject
-    public LoginController(UserServiceI userService){
+    public LoginController(FunctionsI functions, UserServiceI userService){
+        this.functions = functions;
         this.userService = userService;
     }
 
     public void login() throws IOException {
 
-        if(Functions.validateLoginInput(mail.getText(), password.getText())){
+        if(functions.validateLoginInput(mail.getText(), password.getText())){
             UserDTO loginResult = userService.login(mail.getText(), password.getText());
             if(loginResult != null){
+                //save user in preferences
+                Preferences userPreferences = Preferences.userRoot();
+                userPreferences.put(loginResult.getRole().toString(), loginResult.getUsername());
+
                 if(loginResult.getRole().equals(Role.ADMIN)){
                     JavaFxApplication.changeScene(AdminController.class);
+                } else {
+                    JavaFxApplication.changeScene(UserController.class);
                 }
 
+            }else{
+                AlertBox.display("Error", "Invalid mail/password");
             }
 
         } else{

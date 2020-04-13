@@ -45,7 +45,7 @@
                                 </FXCollections>
                             </items>
                         </TableView>
-                        <Label layoutX="530.0" layoutY="58.0" text="Player Operations">
+                        <Label layoutX="530.0" layoutY="58.0" text="User Operations">
                             <font>
                                 <Font size="21.0" />
                             </font>
@@ -55,6 +55,7 @@
                         <TextField fx:id="wallet" layoutX="512.0" layoutY="261.0" prefHeight="30.0" prefWidth="200.0" promptText="wallet" />
                         <Button fx:id="saveUserButton" onAction="#saveNewUser" layoutX="483.0" layoutY="358.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" text="Create" />
                         <Button fx:id="updateUserButton" onAction="#updateUser" layoutX="648.0" layoutY="358.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="95.0" disable="true" text="Update" />
+                        <Button fx:id="clearButton" onAction="#clearFields" layoutX="227.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Clear fields" />
                         <Button fx:id="logOutButton" onAction="#logout" layoutX="40.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Log out" />
                     </children></AnchorPane>
             </content>
@@ -99,6 +100,7 @@
                                 <Font size="21.0" />
                             </font>
                         </Label>
+                        <Button onAction="#clearFields" layoutX="227.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Clear fields" />
                         <Button onAction="#logout" layoutX="40.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Log out" />
                     </children></AnchorPane>
             </content>
@@ -159,6 +161,7 @@
                                 </FXCollections>
                             </items>
                         </TableView>
+                        <Button onAction="#clearFields" layoutX="227.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Clear fields" />
                         <Button onAction="#logout" layoutX="40.0" layoutY="437.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="Log out" />
                     </children>
                 </AnchorPane>

@@ -38,4 +38,11 @@ public class BouquetFlowerDTO {
         this.quantity = quantity;
     }
 
+    public BouquetFlowerDTO(FlowerDTO flowerDTO, BouquetDTO bouquet, int quantity){
+        this.id = 0;
+        this.bouquet = bouquet;
+        this.flower = flowerDTO;
+        this.quantity = quantity;
+    }
+
 }

@@ -24,7 +24,7 @@ public class Flower {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(unique = true)
     private String name;
 
     @Column
@@ -32,5 +32,6 @@ public class Flower {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "flower", cascade =CascadeType.REMOVE, orphanRemoval = true)
     private List<BouquetFlower> bouquetFlowers = new ArrayList<>();
+
 
 }

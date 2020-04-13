@@ -10,6 +10,8 @@ public interface BouquetServiceI {
 
     public ArrayList<BouquetDTO> getAllBouquets();
 
+    public BouquetDTO getBouquetById(int id);
+
     public void createBouquet(String name, ArrayList<BouquetFlowerDTO> flowers);
 
     public void updateBouquet(int id, String name, ArrayList<BouquetFlowerDTO> flowers);
