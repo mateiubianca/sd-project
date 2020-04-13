@@ -6,9 +6,9 @@ import java.io.UnsupportedEncodingException;
 
 public class TxtReport implements Report{
 
-    public void generateReport(String orders){
+    public void generateReport(String orders, String path){
         try{
-            PrintWriter writer = new PrintWriter("Report.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
             writer.println(orders);
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e){

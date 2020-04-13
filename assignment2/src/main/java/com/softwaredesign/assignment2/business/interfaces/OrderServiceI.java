@@ -8,6 +8,6 @@ public interface OrderServiceI {
 
     public void createOrder(UserDTO userDTO, ItemDTO item) throws InsufficientFundsException;
 
-    public void generateOrderReport(String type);
+    public void generateOrderReport(String type, String path);
 
 }

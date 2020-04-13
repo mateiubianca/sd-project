@@ -53,7 +53,7 @@ public class OrderService implements OrderServiceI {
         orderRepo.save(order);
     }
 
-    public void generateOrderReport(String type){
+    public void generateOrderReport(String type, String path){
         StringBuilder ordersStr = new StringBuilder();
 
         List<Order> orders = orderRepo.findAll();
@@ -80,7 +80,7 @@ public class OrderService implements OrderServiceI {
 
         ReportFactory reportFactory = new ReportFactory();
         Report report = reportFactory.getReport(type);
-        report.generateReport(ordersStr.toString());
+        report.generateReport(ordersStr.toString(), path);
 
     }
 

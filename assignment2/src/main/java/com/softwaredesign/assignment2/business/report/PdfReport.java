@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class PdfReport implements Report{
 
-    public void generateReport(String orders){
+    public void generateReport(String orders, String path){
 
         try{
             String lines[] = orders.split("\n");
@@ -33,7 +33,7 @@ public class PdfReport implements Report{
             contentStream.endText();
             contentStream.close();
 
-            document.save("Report.pdf");
+            document.save(path);
             document.close();
         }catch (IOException e){
             System.out.println(e);

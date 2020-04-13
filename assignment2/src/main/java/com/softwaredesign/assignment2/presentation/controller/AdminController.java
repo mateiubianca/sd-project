@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
@@ -406,7 +407,9 @@ public class AdminController {
 
     public void generateReport(){
         if(functions.validateReportInput((String) reportComboBox.getValue())){
-            orderService.generateOrderReport((String) reportComboBox.getValue());
+            FileChooser fileChooser = new FileChooser();
+            String path = fileChooser.showSaveDialog(generateReportButton.getScene().getWindow()).getPath();
+            orderService.generateOrderReport((String) reportComboBox.getValue(), path);
         }else{
             AlertBox.display("Error", "Invalid data");
         }
