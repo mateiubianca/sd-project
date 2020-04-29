@@ -50,18 +50,22 @@ public class FlowerService implements FlowerServiceI {
         return new FlowerDTO(flowerRepo.findByName(name));
     }
 
-    public void createFlower(String name, int price){
+    public FlowerDTO createFlower(String name, int price){
         Flower flower = Flower.builder().name(name).price(price).bouquetFlowers(new ArrayList<>()).build();
         Flower saved = flowerRepo.save(flower);
         Item item = Item.builder().type(ItemType.FLOWER).item(saved.getId()).build();
         itemRepo.save(item);
+
+        return new FlowerDTO(saved);
     }
 
-    public void updateFlower(int id, String name, int price){
+    public FlowerDTO updateFlower(int id, String name, int price){
         Flower flower = flowerRepo.findById(id);
         flower.setName(name);
         flower.setPrice(price);
-        flowerRepo.save(flower);
+        Flower saved = flowerRepo.save(flower);
+
+        return new FlowerDTO(saved);
     }
 
     public void deleteFlower(int id){

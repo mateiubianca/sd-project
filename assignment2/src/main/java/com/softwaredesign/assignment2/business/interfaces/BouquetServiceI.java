@@ -12,9 +12,9 @@ public interface BouquetServiceI {
 
     public BouquetDTO getBouquetById(int id);
 
-    public void createBouquet(String name, ArrayList<BouquetFlowerDTO> flowers);
+    public BouquetDTO createBouquet(String name, ArrayList<BouquetFlowerDTO> flowers);
 
-    public void updateBouquet(int id, String name, ArrayList<BouquetFlowerDTO> flowers);
+    public BouquetDTO updateBouquet(int id, String name, ArrayList<BouquetFlowerDTO> flowers);
 
     public void deleteBouquet(int id);
 

@@ -12,9 +12,9 @@ public interface UserServiceI {
 
     public UserDTO getUserByUsername(String username);
 
-    public void createUser(String username, String password, int wallet);
+    public UserDTO createUser(String username, String password, int wallet);
 
-    public void updateUser(int id, String username, String password, int wallet);
+    public UserDTO updateUser(int id, String username, String password, int wallet);
 
     public void deleteUser(int id);
 

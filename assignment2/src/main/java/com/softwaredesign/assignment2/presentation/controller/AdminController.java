@@ -408,6 +408,7 @@ public class AdminController {
     public void generateReport(){
         if(functions.validateReportInput((String) reportComboBox.getValue())){
             FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter((String) reportComboBox.getValue(), "*." + (String) reportComboBox.getValue()));
             String path = fileChooser.showSaveDialog(generateReportButton.getScene().getWindow()).getPath();
             orderService.generateOrderReport((String) reportComboBox.getValue(), path);
         }else{

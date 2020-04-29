@@ -43,7 +43,7 @@ public class BouquetService implements BouquetServiceI {
         return new BouquetDTO(bouquet);
     }
 
-    public void createBouquet(String name,  ArrayList<BouquetFlowerDTO> flowers){
+    public BouquetDTO createBouquet(String name,  ArrayList<BouquetFlowerDTO> flowers){
 
         ArrayList<BouquetFlower> bouquetFlowers = new ArrayList<>();
 
@@ -75,9 +75,11 @@ public class BouquetService implements BouquetServiceI {
         Item item = Item.builder().type(ItemType.BOUQUET).item(saved.getId()).build();
         itemRepo.save(item);
 
+        return new BouquetDTO(saved);
+
     }
 
-    public void updateBouquet(int id, String name, ArrayList<BouquetFlowerDTO> flowers){
+    public BouquetDTO updateBouquet(int id, String name, ArrayList<BouquetFlowerDTO> flowers){
 
 
         ArrayList<BouquetFlower> bouquetFlowers = new ArrayList<>();
@@ -111,11 +113,13 @@ public class BouquetService implements BouquetServiceI {
         bouquet.setName(name);
         bouquet.getBouquetFlowers().addAll(bouquetFlowers);
 
-        bouquetRepo.save(bouquet);
+        Bouquet saved = bouquetRepo.save(bouquet);
 
         bouquet.getBouquetFlowers().forEach(b ->{
             bouquetFlowerRepo.save(b);
         });
+
+        return new BouquetDTO(saved);
     }
 
     public void deleteBouquet(int id){

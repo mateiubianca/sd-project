@@ -5,6 +5,7 @@ import com.softwaredesign.assignment2.business.interfaces.OrderServiceI;
 import com.softwaredesign.assignment2.business.report.Report;
 import com.softwaredesign.assignment2.business.report.ReportFactory;
 import com.softwaredesign.assignment2.dto.ItemDTO;
+import com.softwaredesign.assignment2.dto.OrderDTO;
 import com.softwaredesign.assignment2.dto.UserDTO;
 import com.softwaredesign.assignment2.persistance.entity.*;
 import com.softwaredesign.assignment2.persistance.repo.*;
@@ -28,7 +29,7 @@ public class OrderService implements OrderServiceI {
     @Inject
     private FlowerRepo flowerRepo;
 
-    public void createOrder(UserDTO userDTO, ItemDTO itemDTO) throws InsufficientFundsException {
+    public OrderDTO createOrder(UserDTO userDTO, ItemDTO itemDTO) throws InsufficientFundsException {
         User user = userRepo.findById(userDTO.getId().intValue());
         Item item = itemRepo.findById(itemDTO.getId().intValue());
 
@@ -50,7 +51,9 @@ public class OrderService implements OrderServiceI {
         userRepo.save(user);
 
         Order order = Order.builder().item(item).user(user).build();
-        orderRepo.save(order);
+        Order saved = orderRepo.save(order);
+
+        return new OrderDTO(saved);
     }
 
     public void generateOrderReport(String type, String path){

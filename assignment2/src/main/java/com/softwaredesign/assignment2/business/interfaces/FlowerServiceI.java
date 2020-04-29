@@ -12,9 +12,9 @@ public interface FlowerServiceI {
 
     public FlowerDTO getFlowerByName(String name);
 
-    public void createFlower(String name, int price);
+    public FlowerDTO createFlower(String name, int price);
 
-    public void updateFlower(int id, String name, int price);
+    public FlowerDTO updateFlower(int id, String name, int price);
 
     public void deleteFlower(int id);
 

@@ -50,17 +50,19 @@ public class UserService implements UserServiceI {
         return null;
     }
 
-    public void createUser(String username, String password, int wallet){
+    public UserDTO createUser(String username, String password, int wallet){
         User user = User.builder().username(username).password(password).wallet(wallet).role(Role.USER).build();
-        userRepo.save(user);
+        User saved = userRepo.save(user);
+        return new UserDTO(saved);
     }
 
-    public void updateUser(int id, String username, String password, int wallet){
+    public UserDTO updateUser(int id, String username, String password, int wallet){
         User user = userRepo.findById(id);
         user.setUsername(username);
         user.setPassword(password);
         user.setWallet(wallet);
-        userRepo.save(user);
+        User updated = userRepo.save(user);
+        return new UserDTO(updated);
     }
 
     public void deleteUser(int id){
