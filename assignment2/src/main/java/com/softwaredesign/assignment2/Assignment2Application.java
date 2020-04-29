@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Assignment2Application {
-
+//changes master
 	public static void main(String[] args) {
 
 		//SpringApplication.run(Assignment2Application.class, args);
